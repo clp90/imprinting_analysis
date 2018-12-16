@@ -1,0 +1,25 @@
+pathway_ID	species	geneID	species2_homologs	status
+PRC2	species1	AT3G20740	GRMZM2G118205,GRMZM2G148924	fail_pval_cutoff
+PRC2	species1	AT2G35670		MEG
+PRC2	species1	AT1G02580		low_counts
+PRC2	species1	AT2G23380	GRMZM2G157820	fail_pval_cutoff
+PRC2	species1	AT4G02020	GRMZM2G043484,GRMZM5G875502	fail_pval_cutoff
+PRC2	species2	GRMZM2G118205	AT3G20740	MEG
+PRC2	species2	GRMZM2G148924	AT3G20740	PEG
+PRC2	species2	GRMZM2G157820	AT2G23380	MEG
+PRC2	species2	GRMZM5G875502	AT4G02020	fail_pval_cutoff
+RdDM	species1	AT1G15215		low_counts
+RdDM	species1	AT1G63020	GRMZM2G007681	patbias_fail_pmat_cutoff
+RdDM	species1	AT2G40030		patbias_fail_IF_cutoff
+RdDM	species1	AT4G11130	GRMZM2G042443	fail_pval_cutoff
+RdDM	species1	AT3G43920	GRMZM2G413853	fail_pval_cutoff
+RdDM	species1	AT2G27040	GRMZM2G141818,GRMZM2G589579	matbias_fail_IF_cutoff
+RdDM	species1	AT2G33830	GRMZM2G123896	censored
+RdDM	species1	AT4G15950	GRMZM2G453424	fail_pval_cutoff
+RdDM	species2	GRMZM2G007681	AT1G63020	PEG
+RdDM	species2	GRMZM2G042443	AT4G11130	fail_pval_cutoff
+RdDM	species2	GRMZM2G413853	AT3G43920	low_counts
+RdDM	species2	GRMZM2G141818	AT2G27040	fail_pval_cutoff
+RdDM	species2	GRMZM2G589579	AT2G27040	fail_pval_cutoff
+RdDM	species2	GRMZM2G123896	AT2G33830	low_counts
+RdDM	species2	GRMZM2G453424	AT4G15950	fail_pval_cutoff

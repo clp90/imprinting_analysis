@@ -1,0 +1,19 @@
+
+Running make_pseudometagenome v1.0		by Colette L. Picard, 03/12/2016
+-------------------------
+Creating pseudometagenome from genome file: /Users/colettepicard/Documents/bioinformatics/for_github_upload_staronly/tests/test_inputs/chr1_subset.fa
+Using SNPs between strain1 and strain2 in: /Users/colettepicard/Documents/bioinformatics/for_github_upload_staronly/tests/test_inputs/snps_subset.bed
+Outputting resulting pseudometagenome to: /Users/colettepicard/Documents/bioinformatics/for_github_upload_staronly/tests/make_metagenome/out.fa
+Outputting resulting metachrom file to: /Users/colettepicard/Documents/bioinformatics/for_github_upload_staronly/tests/make_metagenome/out_metachrom.txt
+Also making modified GTF file compatible with metagenome, starting from: /Users/colettepicard/Documents/bioinformatics/for_github_upload_staronly/tests/test_inputs/GTF_subset.gtf
+-------------------------
+
+Reading in SNP file /Users/colettepicard/Documents/bioinformatics/for_github_upload_staronly/tests/test_inputs/snps_subset.bed
+Total number of SNPs: 106
+-------------------------
+Loading genome /Users/colettepicard/Documents/bioinformatics/for_github_upload_staronly/tests/test_inputs/chr1_subset.fa
+Processing Chr1...
+-------------------------
+DONE. 106 SNP substitutions made to alt genome
+-------------------------
+Creating "meta-GTF" file from /Users/colettepicard/Documents/bioinformatics/for_github_upload_staronly/tests/test_inputs/GTF_subset.gtf

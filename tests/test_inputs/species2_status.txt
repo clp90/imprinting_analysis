@@ -1,0 +1,11 @@
+GRMZM2G007681	father	PEG
+GRMZM2G042443	father	fail_pval_cutoff
+GRMZM2G118205	mother	MEG
+GRMZM2G123896	none	low_counts
+GRMZM2G141818	mother	fail_pval_cutoff
+GRMZM2G148924	father	PEG
+GRMZM2G157820	mother	MEG
+GRMZM2G413853	none	low_counts
+GRMZM2G453424	father	fail_pval_cutoff
+GRMZM2G589579	mother	fail_pval_cutoff
+GRMZM5G875502	father	fail_pval_cutoff

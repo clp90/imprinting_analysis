@@ -1,0 +1,2 @@
+chr	strain1	strain2
+Chr1	Chr1A	Chr1B

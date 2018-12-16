@@ -1,0 +1,13 @@
+AT1G02580	none	low_counts
+AT1G15215	none	low_counts
+AT1G63020	father	fail_pmat_cutoff
+AT2G23380	mother	fail_pval_cutoff
+AT2G27040	mother	fail_IF_cutoff
+AT2G33830	mother	censored
+AT2G35670	mother	MEG
+AT2G40030	father	fail_IF_cutoff
+AT3G20740	father	fail_pval_cutoff
+AT3G43920	father	fail_pval_cutoff
+AT4G02020	father	fail_pval_cutoff
+AT4G11130	mother	fail_pval_cutoff
+AT4G15950	father	fail_pval_cutoff

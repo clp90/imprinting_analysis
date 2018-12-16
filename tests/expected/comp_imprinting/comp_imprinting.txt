@@ -1,0 +1,14 @@
+geneID_species1	status_species1	best_homolog_species2	best_status_species2	diff
+AT1G63020	patbias_fail_pmat_cutoff	GRMZM2G007681	PEG	-1
+AT2G40030	patbias_fail_IF_cutoff	none	no_homolog	
+AT4G11130	fail_pval_cutoff	GRMZM2G042443	fail_pval_cutoff	0
+AT2G27040	matbias_fail_IF_cutoff	GRMZM2G141818	fail_pval_cutoff	1
+AT1G02580	low_counts	none	no_homolog	
+AT2G33830	censored	none	no_homolog	
+AT3G20740	fail_pval_cutoff	GRMZM2G118205	MEG	-4
+AT4G15950	fail_pval_cutoff	GRMZM2G453424	fail_pval_cutoff	0
+AT2G35670	MEG	none	no_homolog	
+AT4G02020	fail_pval_cutoff	GRMZM5G875502	fail_pval_cutoff	0
+AT3G43920	fail_pval_cutoff	GRMZM2G413853	low_counts	
+AT1G15215	low_counts	none	no_homolog	
+AT2G23380	fail_pval_cutoff	GRMZM2G157820	MEG	-4
