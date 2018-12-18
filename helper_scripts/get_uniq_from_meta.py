@@ -14,6 +14,10 @@ v.1.1 - 11/11/2018
 	location but on two different chromosomes AND those chromosomes were
 	not in the metachrom file, it caused a keyerror. Now checks that both
 	chromosomes involved are in the metachrom before proceeding (censored if not)
+v.1.2 - 12/17/2018
+	- script now also adjusts the NH field (number of alignments) for all reads
+	back to 1, so htseq-count or other programs won't see these reads as non-uniquely
+	mapping.
 
 -------------------------
 '''
@@ -22,7 +26,7 @@ import sys, os, argparse
 
 if len(sys.argv) == 1:
 	print "-------------------------"
-	print "get_uniq_from_meta v1.1		by Colette L. Picard, 11/11/2018"
+	print "get_uniq_from_meta v1.2		by Colette L. Picard, 12/17/2018"
 	print "-------------------------"
 	print """Simple script to extract unique alignments to the regular genome from a list
 of alignments from mapping to a metagenome with tophat. When mapping to the metagenome,
@@ -56,7 +60,7 @@ reads = args.reads
 fmetachrom = args.metachrom
 outfile = args.outfile
 
-print "Running get_uniq_from_meta v1.1		by Colette L. Picard, 11/11/2018"
+print "Running get_uniq_from_meta v1.2		by Colette L. Picard, 12/17/2018"
 print "-------------------------"
 
 #-------------------------------------------------------------
@@ -186,6 +190,16 @@ while line:
 							read1[4] = '255'
 							read1[1] = updateSAMflag(read1[1])
 							read1.append("XP:Z:none")
+							
+							# get index of NH:i: field so we can change it to 1 (must be past 11th field of SAM file)
+							index = [idx for idx, s in enumerate(read1[10:]) if 'NH:i:' in s][0] + 10
+							read1[index] = "NH:i:1"		
+							
+							# similarly, fix HI field (hit index; numbers multimappers from 1 to NH)
+							index = [idx for idx, s in enumerate(read1[10:]) if 'HI:i:' in s][0] + 10
+							read1[index] = "HI:i:1"							
+
+							# write completed alignment to file
 							out.write('\t'.join(read1)+'\n')
 							unique_alignments_single+=1
 	#				else:
@@ -227,24 +241,40 @@ while line:
 						r1[2] = metachrom[r1[2]]
 						r1[4] = '255'
 						r1[1] = updateSAMflag(r1[1])
+						index = [idx for idx, s in enumerate(r1[10:]) if 'NH:i:' in s][0] + 10
+						r1[index] = "NH:i:1"							
+						index = [idx for idx, s in enumerate(r1[10:]) if 'HI:i:' in s][0] + 10
+						r1[index] = "HI:i:1"							
 						r1.append("XP:Z:none")
 						out.write('\t'.join(r1)+'\n')
 					if r2[2] in metachrom:
 						r2[2] = metachrom[r2[2]]
 						r2[4] = '255'
 						r2[1] = updateSAMflag(r2[1])
+						index = [idx for idx, s in enumerate(r2[10:]) if 'NH:i:' in s][0] + 10
+						r2[index] = "NH:i:1"							
+						index = [idx for idx, s in enumerate(r2[10:]) if 'HI:i:' in s][0] + 10
+						r2[index] = "HI:i:1"							
 						r2.append("XP:Z:none")
 						out.write('\t'.join(r2)+'\n')
 					if r3[2] in metachrom:
 						r3[2] = metachrom[r3[2]]
 						r3[4] = '255'
 						r3[1] = updateSAMflag(r3[1])
+						index = [idx for idx, s in enumerate(r3[10:]) if 'NH:i:' in s][0] + 10
+						r3[index] = "NH:i:1"							
+						index = [idx for idx, s in enumerate(r3[10:]) if 'HI:i:' in s][0] + 10
+						r3[index] = "HI:i:1"							
 						r3.append("XP:Z:none")
 						out.write('\t'.join(r3)+'\n')					
 					if r4[2] in metachrom:
 						r4[2] = metachrom[r4[2]]
 						r4[4] = '255'
 						r4[1] = updateSAMflag(r4[1])
+						index = [idx for idx, s in enumerate(r4[10:]) if 'NH:i:' in s][0] + 10
+						r4[index] = "NH:i:1"							
+						index = [idx for idx, s in enumerate(r4[10:]) if 'HI:i:' in s][0] + 10
+						r4[index] = "HI:i:1"							
 						r4.append("XP:Z:none")
 						out.write('\t'.join(r4)+'\n')						
 	#			else:
