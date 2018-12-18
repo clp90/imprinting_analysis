@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # ------------------------------------------------------------------------------------
-# v2.0 by Colette L. Picard
-# 11/08/2018
+# v2.1 by Colette L. Picard
+# 12/17/2018
 # ------------------------------------------------------------------------------------
 
 # Usage:
@@ -12,11 +12,12 @@
 # Version history:
 # v.1.0: initial build - 04/30/2015
 # v.2.0: major rebuild - 11/08/2018
+# v.2.1: added -N option (htseq-count option --nonunique all); changed default to --nonunique none - 12/17/2018
 # -------------------------
 
 # Description printed when "help" option specified:
 read -d '' usage <<"EOF"
-v.2.0 by Colette L Picard, 11/08/2018
+v.2.1 by Colette L Picard, 12/17/2018
 -------------------------------
 Usage:
 call_imprinted.sh [options] -1 cross1.bam -2 cross2.bam -s snp_file.bed -R ratio -o outdir
@@ -94,6 +95,13 @@ of maternal to paternal reads for most endosperms is 2, not 1.
 	By default, discordant pairs are treated as two singletons, but this might lead to double counting
 	(since each singleton counts as 1). Alternately, discordant pairs can be treated like proper pairs 
 	if the -l flag is used.
+	(5) strongly recommend stranded RNA-seq data if possible. By default, htseq-count is in --nonunique none
+	mode, so reads overlapping more than one annotation (on the same strand, if RNA-seq data is stranded)
+	will not be counted. This is commonly an issue for non-stranded data, where a read may map to a locus
+	with both a sense and antisense annotation - since it is unclear which transcript generated the read,
+	it is censored. However, this behavior can be turned off by using -N with this script (equivalent to
+	the htseq-count option --nonunique all) - with this option, reads overlapping multiple annotations
+	will be counted for all of them. Note that this is generally not recommended.
 - The location for output files is provided with -o and must be a non-existant or empty
 folder, else the script will (by default) refuse to overwrite its contents. Note this can be overridden
 with the -r option, which you use at your own risk.
@@ -135,6 +143,7 @@ Flag options:
 	-l : (assign_to_allele) treat all read pairs as pairs for assign_to_allele and counting purposes (default proper pairs only, non-proper pairs treated as singletons) [relaxed=false]
 	-D : (assign_to_allele) remove PCR duplicates after assigning reads to parent-of-origin [dedup=false]
 	-F : (htseq-count) only run htseq-count on the reads that could be assigned to a parent of origin (default also runs htseq-count on all reads; use if time is an issue) [skipall=false]
+	-N : (htseq-count) for reads overlapping multiple annotations, count for all overlapping annotations (by default, these reads are censored; see htseq-count --nonunique all) [alluniq=false]
 	-w : (htseq-count) AxB library is stranded with first read in pair on same strand as feature [AxBfirststrand=false]
 	-W : (htseq-count) BxA library is stranded with first read in pair on same strand as feature [BxAfirststrand=false]
 	-v : (htseq-count) AxB library is stranded with first read in pair on opposite strand as feature [AxBsecstrand=false]
@@ -213,6 +222,7 @@ BxA_B=""							# counts file for B reads, from BxA
 relaxed=false							# (assign_to_allele) treat all read pairs as pairs for assign_to_allele and counting purposes (default proper pairs only, non-proper pairs treated as singletons)
 dedup=false							# (assign_to_allele) remove PCR duplicates after assigning reads to parent-of-origin
 skipall=false							# (htseq-count) only run htseq-count on the reads that could be assigned to a parent of origin (default also runs htseq-count on all reads; use if time is an issue)
+alluniq=false							# (htseq-count) for reads overlapping multiple annotations, count for all overlapping annotations (by default, these reads are censored; see htseq-count --nonunique all)
 AxBfirststrand=false							# (htseq-count) AxB library is stranded with first read in pair on same strand as feature
 BxAfirststrand=false							# (htseq-count) BxA library is stranded with first read in pair on same strand as feature
 AxBsecstrand=false							# (htseq-count) AxB library is stranded with first read in pair on opposite strand as feature
@@ -222,7 +232,7 @@ overwrite=false							# allow overwrite of existing files in provided outdir - d
 checkdep=false
 
 # ----------------------
-while getopts "R:o:1:2:S:G:x:y:X:Y:n:A:B:m:c:p:I:C:M:P:f:i:s:a:lDFwWvVr0h" opt; do
+while getopts "R:o:1:2:S:G:x:y:X:Y:n:A:B:m:c:p:I:C:M:P:f:i:s:a:lDFNwWvVr0h" opt; do
 	case $opt in
 		R)	# expected ratio of maternal to paternal expression (e.g. 2 for endosperm, 1 for embryo)
 			ratio="$OPTARG"
@@ -304,6 +314,9 @@ while getopts "R:o:1:2:S:G:x:y:X:Y:n:A:B:m:c:p:I:C:M:P:f:i:s:a:lDFwWvVr0h" opt; 
 			;;
 		F)	# (htseq-count) only run htseq-count on the reads that could be assigned to a parent of origin (default also runs htseq-count on all reads; use if time is an issue)
 			skipall=true
+			;;
+		N)	# (htseq-count) for reads overlapping multiple annotations, count for all overlapping annotations (by default, these reads are censored; see htseq-count --nonunique all)
+			alluniq=true
 			;;
 		w)	# (htseq-count) AxB library is stranded with first read in pair on same strand as feature
 			AxBfirststrand=true
@@ -474,6 +487,13 @@ fi
 # ----------------------
 [[ ! -z "$AxB_A" && ! -z "$AxB" ]] && { echo "Error: please provide either SAM/BAM files or count files"; exit 1; }
 
+# Check that htseq-count mode provided is allowed
+# ----------------------
+if [[ "$htseq_mode" != "union" && "$htseq_mode" != "intersection_strict" && "$htseq_mode" != "intersection_nonempty" ]]; then
+	echo "Error: value for -m must be 'union', 'intersection_strict' or 'intersection_nonempty'"
+	exit 1
+fi
+
 # If output folder doesn't exist, make it, else overwrite if user used -r, else error
 # ----------------------
 if [ ! -d "$outdir" ]; then
@@ -543,6 +563,8 @@ echo "For PEGs, % maternal must be <= $maxpmPEG in both AxB and BxA" | tee -a "$
 echo "-------------------------" | tee -a "$log"
 echo "Additional parameters:" | tee -a "$log"
 [ -z "$addinfo" ] || { echo "Additionally, genes in this list will be excluded from the analysis: $filter" | tee -a "$log"; }
+echo "Htseq-count is being run in mode: $htseq_mode" | tee -a "$log"
+[ "$alluniq" = "true" ] && { echo "Htseq-count will count reads overlapping multiple annotations once for each annotation (WARNING: not recommended)" | tee -a "$log"; }
 echo "Location of helper scripts: $path_to_scripts" | tee -a "$log"
 echo "-------------------------" | tee -a "$log"
 
@@ -563,12 +585,6 @@ if [ "$mode" = "BAM" ]; then
 		[ "$rres" = "SNPERR" ] && echo "4th column (SNP) must be in the form strain1allele>strain2allele (e.g. A>T)"
 		echo "First few lines of file:"
 		head -3 "$SNPs"
-		exit 1
-	fi
-	
-	# check that $htseq_mode is acceptable value
-	if [[ "$htseq_mode" != "union" && "$htseq_mode" != "intersection_strict" && "$htseq_mode" != "intersection_nonempty" ]]; then
-		echo "Error: value for -m must be 'union', 'intersection_strict' or 'intersection_nonempty'"
 		exit 1
 	fi
 fi
@@ -693,10 +709,11 @@ if [ "$mode" = "BAM" ]; then
 	
 # -----------HTSEQ-COUNT-----------
 	[ "$dedup" = "true" ] && sortstr=" --order pos" || sortstr="" 
+	[ "$alluniq" = "true" ] && uniqstr="all" || uniqstr="none"
 	for ((i=0;i<${#samfiles[@]};++i)); do
 		echo " - Counting ${strain[i]} reads in ${cross[i]}" | tee -a "$log"
 		if [ -f "${samfiles[i]}" ]; then		
-			python -m HTSeq.scripts.count --nonunique all${sortstr} -m "$htseq_mode" -s "${libtypes[i]}" "${samfiles[i]}" "$annot" > "$outdir/counts_per_gene/${name}_${cross[i]}_${strain[i]}_counts.txt" 2> "$outdir/counts_per_gene/htseq_count_${cross[i]}_${strain[i]}_log.txt"
+			python -m HTSeq.scripts.count --nonunique "$uniqstr"${sortstr} -m "$htseq_mode" -s "${libtypes[i]}" "${samfiles[i]}" "$annot" > "$outdir/counts_per_gene/${name}_${cross[i]}_${strain[i]}_counts.txt" 2> "$outdir/counts_per_gene/htseq_count_${cross[i]}_${strain[i]}_log.txt"
 			[ $? != 0 ] && err_msg "error running htseq-count, see $outdir/counts_per_gene/htseq_count_${cross[i]}_${strain[i]}_log.txt" "$log"	
 		else
 			err_msg "no ${strain[i]} reads detected in ${cross[i]}" "$log"
