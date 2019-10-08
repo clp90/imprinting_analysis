@@ -229,7 +229,9 @@ AxB_bam="AxB_mapping_dir/STAR/expt_unique_alignments_dedup.bam"
 BxA_bam="BxA_mapping_dir/STAR/expt_unique_alignments_dedup.bam"
 $scriptDir/call_imprinting.sh -o "imprinting_dir" -1 "$AxB_bam" -2 "$BxA_bam" -S "snps.bed" -G "annot.gtf" -A "A" -B "B"
 ```
-- Note: we recommend mapping to a metagenome when possible to avoid mapping bias in favor of the strain with greater sequence similarity to the sequenced genome.
+Notes: 
+- We recommend mapping to a metagenome when possible to avoid mapping bias in favor of the strain with greater sequence similarity to the sequenced genome.
+- The mapping script rna_seq_map.sh outputs two alignment files, one that includes PCR duplicates (${html`*`}_unique_alignments.bam) and one with PCR duplicates removed (${html`*`}_unique_alignments_dedup.bam). Either can be used for this analysis, although we recommend removing PCR duplicates if library complexity is low or reads are paired-end.
 
 ### Starting from count data:
 Let `AxB_A.txt` and `AxB_B.txt` be per-gene allele-specific read counts from A and B respectively in the AxB cross, and `BxA_A.txt` and `BxA_B.txt` be per-gene allele-specific read counts from A and B respectively in the BxA cross. Again, let `$scriptDir` be the folder where this repository was installed.
