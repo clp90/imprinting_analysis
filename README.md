@@ -64,15 +64,18 @@ Just download the repository, which includes the main scripts `make_metagenome.p
 
 Several other programs are required to run these scripts. These are all freely available, and are listed below.
 
-## Required additional programs
-All programs listed below must be on your `$PATH`. Indicated version was used in testing, but other versions may also be compatible.
+## Dependencies
+These are only required for `rna_seq_map.sh` and must be on your `$PATH`. They're not required if starting from allele-specific count data. Indicated version was used in testing, but other versions may also be compatible.
 
 - `fastqc` (Andrews 2010) [0.11.8](https://www.bioinformatics.babraham.ac.uk/projects/download.html#fastqc)
 - `trim_galore` (Krueger 2012) [0.5.0](https://www.bioinformatics.babraham.ac.uk/projects/trim_galore/)
+	- requires the python `cutadapt` package, see below
 - `samtools` (Li *et al.* 2009) [1.9](http://www.htslib.org/)
 - `STAR` (Dobin *et al.* 2012) [2.6.1d](https://github.com/alexdobin/STAR)
+- `MarkDuplicates.jar` (picard-tools suite, Broad Institute) [1.121]
+	- provided in this repository (downloaded Oct. 2, 2015) for convenience (licensed under the MIT license)
 
-Additional requirements:
+Other requirements:
 - `Java 1.8+` [1.8.0_191]
 - `Python 2.7.11+` [2.7.15]
 	- `HTSeq` (Anders *et al.* 2014) [0.11.0]
@@ -82,8 +85,6 @@ Additional requirements:
 - `R` [3.5.1]
 	- `argparse` (Davis 2018) [1.1.1-1]
 	- `Hmisc` (Harrell 2018) [4.1-1]
-
-`MarkDuplicates.jar` from the picard-tools suite (Copyright (c) 2017 Broad Institute) is also required, but is provided in this repository (version 1.121 downloaded Oct. 2, 2015) for convenience. The picard-tools suite is licensed under the MIT license.
 
 ### Testing Installation
 The script `run_tests.sh` included in this repository checks that all required dependencies are installed, and performs small test runs to check that everything is working properly. `cd` to the location where this repository's folder was installed (which should contain `run_tests.sh`, `make_metagenome.py`, `rna_seq_map.sh`, `call_imprinting.sh` and `get_homology.py`), and run:
