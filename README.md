@@ -1,5 +1,5 @@
 # Imprinting Analysis v.1.0
-This is a small suite of scripts designed to provide a consistent pipeline for imprinting analyses starting from raw RNA-seq data or count data. The ultimate goal of this project is to enable comparisons between imprinting calls made in different datasets or species. The approach is based on the analysis in Gehring *et al.* 2011.
+This is a small suite of scripts designed to provide a consistent pipeline for genomic imprinting analyses, enabling comparisons between imprinting calls made in different datasets or species. The approach is based on the analysis in Gehring *et al.* 2011.
 
 Publication: Picard CL, Gehring M. Identification and Comparison of Imprinted Genes Across Plant Species. *Methods Mol Biol.* 2020;2093:173-201. [doi: 10.1007/978-1-0716-0179-2_13](https://dx.doi.org/10.1007/978-1-0716-0179-2_13).
 
