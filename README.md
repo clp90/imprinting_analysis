@@ -12,10 +12,10 @@ This pipeline should be suitable for assessing imprinting in any species, includ
 2. Align sequencing reads from AxB and BxA to the (meta)genome using `rna_seq_map.sh`
 3. Count allele-specific reads in both crosses and assess imprinting using `call_imprinting.sh`
 
-Alternatively, `call_imprinting.sh` can be used directly with allele-specific count data (see below).
+Alternatively, `call_imprinting.sh` can be used directly with allele-specific count data if already available (see below).
 - `get_homologs.py` and `comp_imprinting.py` are also included in this repository to facilitate imprinting comparisons across species, where gene homology must be taken into account. 
-	- `get_homologs.py` queries phytozome (Goodstein *et al.* 2011) to obtain homology information in a target species for a set of genes in a query species. `get_homologs.py` is plant-specific, and will not produce homolog information for species not in the phytozome database.
-	- `comp_imprinting.py` performs a detailed comparison of imprinting between two different species, given imprinting data (ideally obtained from `call_imprinting.sh`, with both analyses using the same parameters).
+	- `get_homologs.py` queries phytozome (Goodstein *et al.* 2011) to obtain homology information in a target species for a set of genes in a query species. Both species must be in the phytozome database.
+	- `comp_imprinting.py` compares imprinting between two different species.
 
 ### Required inputs if starting from raw RNA-seq data:
 - two FASTQ files, one from AxB and one from BxA
@@ -60,9 +60,9 @@ AT1G06550	4
 ```
 
 # Installation
-To install the scripts included in this project, simply download the repository, which includes the main scripts `make_metagenome.py`, `rna_seq_map.sh`, `call_imprinting.sh`, `get_homologs.py` and `comp_imprinting.py`, as well as several helper scripts in their own subfolder `/helper_scripts` and a testing script `run_tests.sh` that can verify the installation. 
+Just download the repository, which includes the main scripts `make_metagenome.py`, `rna_seq_map.sh`, `call_imprinting.sh`, `get_homologs.py` and `comp_imprinting.py`, as well as several helper scripts in their own subfolder `/helper_scripts` and a testing script `run_tests.sh` that can verify the installation. 
 
-Several other programs are required to run these scripts. These are all freely available, and are listed below along with installation instructions. Version indicated in square brackets was used in testing; if something is not working, consider installing the exact version in brackets below.
+Several other programs are required to run these scripts. These are all freely available, and are listed below.
 
 ## Required additional programs
 All programs listed below must be on your `$PATH`. Indicated version was used in testing, but other versions may also be compatible.
@@ -86,12 +86,12 @@ Additional requirements:
 `MarkDuplicates.jar` from the picard-tools suite (Copyright (c) 2017 Broad Institute) is also required, but is provided in this repository (version 1.121 downloaded Oct. 2, 2015) for convenience. The picard-tools suite is licensed under the MIT license.
 
 ### Testing Installation
-The script `run_tests.sh` included in this repository checks that all required dependencies are installed, and performs small test runs to check that everything is working properly. Change directory to the location where this repository's folder was installed (which should contain `run_tests.sh`, `make_metagenome.py`, `rna_seq_map.sh`, `call_imprinting.sh` and `get_homology.py`), and run:
+The script `run_tests.sh` included in this repository checks that all required dependencies are installed, and performs small test runs to check that everything is working properly. `cd` to the location where this repository's folder was installed (which should contain `run_tests.sh`, `make_metagenome.py`, `rna_seq_map.sh`, `call_imprinting.sh` and `get_homology.py`), and run:
 
 ```
 ./run_tests.sh
 ```
-If this run completes without any errors, all tools in this repository should be ready for use. See below for some examples.
+If this run completes without any errors, all scripts in this repository should be ready for use. See below for some examples.
 
 ## Examples
 ### Starting from raw RNA-seq data:
@@ -126,7 +126,7 @@ BxA_bam="BxA_mapping_dir/STAR/expt_unique_alignments_dedup.bam"
 $scriptDir/call_imprinting.sh -o "imprinting_dir" -1 "$AxB_bam" -2 "$BxA_bam" -S "snps.bed" -G "annot.gtf" -A "A" -B "B"
 ```
 Notes: 
-- We recommend mapping to a metagenome when possible to avoid mapping bias in favor of the strain with greater sequence similarity to the sequenced genome.
+- We recommend mapping to a metagenome when possible to minimize mapping bias in favor of the strain with greater sequence similarity to the sequenced genome.
 - The mapping script rna_seq_map.sh outputs two alignment files, one that includes PCR duplicates (`*_unique_alignments.bam`) and one with PCR duplicates removed (`*_unique_alignments_dedup.bam`). Either can be used for this analysis, although we recommend removing PCR duplicates if library complexity is low or reads are paired-end.
 
 ### Starting from count data:
