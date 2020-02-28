@@ -62,13 +62,15 @@ To install the scripts included in this project, simply download the repository,
 
 Several other programs are required to run these scripts. These are all freely available, and are listed below along with installation instructions. Version indicated in square brackets was used in testing; if something is not working, consider installing the exact version in brackets below.
 
-## Required additional software
-All programs listed below must be on your `$PATH` - see installation instructions below for an example setup.
+## Required additional programs
+All programs listed below must be on your `$PATH`. Indicated version was used in testing, but other versions may also be compatible.
 
-- `fastqc` (Andrews 2010) [0.11.8]
-- `trim_galore` (Krueger 2012) [0.5.0]
-- `samtools` (Li *et al.* 2009) [1.9]
-- `STAR` (Dobin *et al.* 2012) [2.6.1d]
+- `fastqc` (Andrews 2010) [0.11.8](https://www.bioinformatics.babraham.ac.uk/projects/download.html#fastqc)
+- `trim_galore` (Krueger 2012) [0.5.0](https://www.bioinformatics.babraham.ac.uk/projects/trim_galore/)
+- `samtools` (Li *et al.* 2009) [1.9](http://www.htslib.org/)
+- `STAR` (Dobin *et al.* 2012) [2.6.1d](https://github.com/alexdobin/STAR)
+
+Additional requirements:
 - `Java 1.8+` [1.8.0_191]
 - `Python 2.7.11+` [2.7.15]
 	- `HTSeq` (Anders *et al.* 2014) [0.11.0]
@@ -79,15 +81,15 @@ All programs listed below must be on your `$PATH` - see installation instruction
 	- `argparse` (Davis 2018) [1.1.1-1]
 	- `Hmisc` (Harrell 2018) [4.1-1]
 
-`MarkDuplicates.jar` from the picard-tools suite (Copyright (c) 2017 Broad Institute) is also required, but is provided in this repository (in the `helper_scripts` subdirectory; version 1.121 downloaded Oct. 2, 2015) for convenience. The picard-tools suite is licensed under the MIT license.
+`MarkDuplicates.jar` from the picard-tools suite (Copyright (c) 2017 Broad Institute) is also required, but is provided in this repository (version 1.121 downloaded Oct. 2, 2015) for convenience. The picard-tools suite is licensed under the MIT license.
 
 ### Testing Installation
-The script `run_tests.sh` included in this repository checks that all required dependencies are installed, and performs mini test runs to check that everything is working properly. Change directory to the location where this repository's folder was installed (which should contain `run_tests.sh`, `make_metagenome.py`, `rna_seq_map.sh`, `call_imprinting.sh` and `get_homology.py`), and run:
+The script `run_tests.sh` included in this repository checks that all required dependencies are installed, and performs small test runs to check that everything is working properly. Change directory to the location where this repository's folder was installed (which should contain `run_tests.sh`, `make_metagenome.py`, `rna_seq_map.sh`, `call_imprinting.sh` and `get_homology.py`), and run:
 
 ```
 ./run_tests.sh
 ```
-If this run completes without any errors, all scripts should be ready for use. See below for some examples.
+If this run completes without any errors, all tools in this repository should be ready for use. See below for some examples.
 
 ## Examples
 ### Starting from raw RNA-seq data:
